@@ -1,0 +1,43 @@
+# Maven / Java
+**/target/
+**/*.class
+**/.metadata/
+**/bin/
+**/tmp/
+**/dependency-reduced-pom.xml
+
+# Node / JS
+**/node_modules/
+**/dist/
+**/.eslintcache
+**/.vite/
+
+# Python
+**/.venv/
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/.pytest_cache/
+**/.ipynb_checkpoints/
+**/.poetry/
+**/pip-log.txt
+**/pip-delete-this-directory.txt
+
+# Local Environment / System
+.env
+.env.local
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Project-specific local storage
+uploads/
+pgdata/
+maven/
