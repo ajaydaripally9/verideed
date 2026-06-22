@@ -1,0 +1,60 @@
+services:
+  # 1. Database
+  - type: db
+    name: verideed-db
+    plan: free
+    databaseName: verideed
+    user: verideed_user
+
+  # 2. Python AI Service
+  - type: web
+    name: verideed-ai
+    env: docker
+    dockerContext: ./ai-service
+    dockerfilePath: ./ai-service/Dockerfile
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8000
+
+  # 3. Java Spring Boot Backend
+  - type: web
+    name: verideed-backend
+    env: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    plan: free
+    envVars:
+      - key: SERVER_PORT
+        value: 8080
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: verideed-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: verideed-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: verideed-db
+          property: password
+      - key: AI_SERVICE_URL
+        fromService:
+          type: web
+          name: verideed-ai
+          property: host
+
+  # 4. React Frontend
+  - type: web
+    name: verideed-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    publishDir: frontend/dist
+    plan: free
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: verideed-backend
+          property: host
