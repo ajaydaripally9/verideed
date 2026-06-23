@@ -10,18 +10,23 @@ RUN npm run build
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Custom Nginx configuration to support client-side routing (React Router)
+# Default fallback port if not set by Railway
+ENV PORT=80
+
+# Create templates directory for Nginx environment variable substitution
+RUN mkdir -p /etc/nginx/templates
+
+# Nginx configuration template listening on dynamic $PORT
 RUN echo 'server { \
-    listen 80; \
+    listen ${PORT}; \
     location / { \
         root /usr/share/nginx/html; \
         index index.html index.htm; \
         try_files $uri $uri/ /index.html; \
     } \
-}' > /etc/nginx/conf.d/default.conf
+}' > /etc/nginx/templates/default.conf.template
 
 # Limit Nginx to 1 worker process to prevent OOM on high-core hosts
 RUN sed -i 's/worker_processes.*/worker_processes 1;/g' /etc/nginx/nginx.conf
 
-EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
