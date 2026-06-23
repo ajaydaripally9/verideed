@@ -20,5 +20,8 @@ RUN echo 'server { \
     } \
 }' > /etc/nginx/conf.d/default.conf
 
+# Limit Nginx to 1 worker process to prevent OOM on high-core hosts
+RUN sed -i 's/worker_processes.*/worker_processes 1;/g' /etc/nginx/nginx.conf
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
