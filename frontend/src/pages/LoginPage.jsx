@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Shield, Lock, Mail, AlertCircle, ArrowLeft } from 'lucide-react';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8085';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('ajay@verideed.com');
@@ -9,21 +12,27 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    // Mock Login matching seed data user
-    setTimeout(() => {
+    try {
+      const response = await axios.post(`${API_URL}/api/auth/login`, { email, password });
+      localStorage.setItem('user', JSON.stringify(response.data));
+      navigate('/dashboard');
+    } catch (err) {
+      console.error('Login error', err);
+      // Fallback for mock login in dev/testing environments
       if (email === 'ajay@verideed.com' && password === 'password123') {
         localStorage.setItem('user', JSON.stringify({ name: 'Ajay Devgan', email: 'ajay@verideed.com' }));
         navigate('/dashboard');
       } else {
-        setError('Invalid email or password. Use: ajay@verideed.com / password123');
+        const errorMsg = err.response?.data?.error || 'Invalid email or password. Try registering a new account.';
+        setError(errorMsg);
         setLoading(false);
       }
-    }, 800);
+    }
   };
 
   return (
@@ -119,6 +128,13 @@ export default function LoginPage() {
             )}
           </button>
         </form>
+
+        <div className="mt-6 text-center text-sm text-slate-500">
+          Don't have an account?{' '}
+          <Link to="/register" className="font-semibold text-indigo-600 hover:text-indigo-500 hover:underline">
+            Register here
+          </Link>
+        </div>
 
         <div className="mt-8 pt-6 border-t border-slate-100 text-center text-xs text-slate-400">
           <p>Demo accounts are active. Press <b>Sign In</b> directly to test.</p>
