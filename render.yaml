@@ -52,6 +52,11 @@ services:
           type: web
           name: verideed-ai
           property: host
+      - key: FRONTEND_URL
+        fromService:
+          type: web
+          name: verideed-frontend
+          property: host
 
   # 4. React Frontend
   - type: web
