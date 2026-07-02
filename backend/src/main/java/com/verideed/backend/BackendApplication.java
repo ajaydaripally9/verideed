@@ -7,7 +7,7 @@ import org.springframework.core.env.MapPropertySource;
 import java.util.HashMap;
 import java.util.Map;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = { org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration.class })
 public class BackendApplication {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(BackendApplication.class);
