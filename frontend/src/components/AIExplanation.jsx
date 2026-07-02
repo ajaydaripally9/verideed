@@ -31,7 +31,7 @@ export default function AIExplanation() {
           <div className="lg:col-span-7">
             <div className="glass-panel rounded-2xl border border-slate-200 p-6 md:p-8 bg-white relative overflow-hidden shadow-md">
               <div className="flex items-center space-x-3 mb-6 border-b border-slate-100 pb-4">
-                <div className="p-2 bg-red-55 border border-red-100 text-red-600 rounded-lg">
+                <div className="p-2 bg-red-50 border border-red-100 text-red-600 rounded-lg">
                   <ShieldAlert className="w-5 h-5 animate-pulse" />
                 </div>
                 <div>
